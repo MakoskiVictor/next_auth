@@ -1,6 +1,5 @@
 "use client"
 import { useForm } from 'react-hook-form'
-import { PostUser } from '@/app/api/auth/register/route'
 
 type FormValues = {
     firstname: string
@@ -15,17 +14,23 @@ export default function RegisterPage () {
     const { register, handleSubmit, formState: { errors}, watch } = useForm<FormValues>()
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log("Inicio HandleSubmit", data)
+  
         const formData = {
             firstname: data.firstname,
             lastname: data.lastname,
             email: data.email,
             password: data.password,
         }
-        console.log("Mitad HandleSubmit", formData)
-        const res = await PostUser(formData)
-        //const resJSON = await res.json()
-        console.log(res)
+
+        const res = await fetch('/api/auth/register', {
+            method: "POST",
+            headers: {
+                "Content-Type": "aplication/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        const resJSON = await res.json()
+        console.log(resJSON)
     })
 
     console.log(errors)

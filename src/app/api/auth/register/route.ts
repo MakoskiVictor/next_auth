@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import db from "@/app/libs/db"
 
 interface RegisterData {
     firstname: string
@@ -7,17 +8,30 @@ interface RegisterData {
     password: string
 }
 
-export async function PostUser (request : RegisterData) {
-    //const data = await request.json() 
-    console.log("Inicio postUser", request)
-    const data = await fetch('https://metropolitan-k7ev.vercel.app/api/v1/auth/register', {
-        method: "POST",
-        headers: {
-            "Content-Type": "aplication/json"
-        },
-        body: JSON.stringify(request)
+interface RegisterDataJson {
+    json(): RegisterData
+}
+
+export async function POST (request : RegisterDataJson) {
+    const data = await request.json() 
+
+    const userFound = await db.user.findUnique({
+        where: {
+            email: data.email
+        }
     })
-    console.log("Final postUser", data)
-    //return NextResponse.json("registering...")
-    return data
+
+    if(userFound) {
+        return NextResponse.json({
+            message: "Email alredy exist"
+        },{
+            status: 400
+        })
+    }
+
+    const newUser = await db.user.create({
+        data
+    })
+    
+    return NextResponse.json(newUser)
 }
