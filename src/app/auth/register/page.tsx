@@ -1,5 +1,6 @@
 "use client"
 import { useForm } from 'react-hook-form'
+import { useRouter } from "next/navigation"
 
 type FormValues = {
     firstname: string
@@ -10,6 +11,8 @@ type FormValues = {
 }
 
 export default function RegisterPage () {
+
+    const router = useRouter()
 
     const { register, handleSubmit, formState: { errors}, watch } = useForm<FormValues>()
 
@@ -29,8 +32,10 @@ export default function RegisterPage () {
             },
             body: JSON.stringify(formData)
         })
-        const resJSON = await res.json()
-        console.log(resJSON)
+        
+        if(res.ok) {
+            router.push("/auth/login")
+        }
     })
 
     console.log(errors)

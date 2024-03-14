@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import db from "@/app/libs/db"
+import bcrypt from "bcrypt"
+
 
 interface RegisterData {
     firstname: string
@@ -13,7 +15,8 @@ interface RegisterDataJson {
 }
 
 export async function POST (request : RegisterDataJson) {
-    const data = await request.json() 
+    try {
+        const data = await request.json() 
 
     const userFound = await db.user.findUnique({
         where: {
@@ -29,9 +32,26 @@ export async function POST (request : RegisterDataJson) {
         })
     }
 
+    const hashedPassword = await bcrypt.hash(data.password, 10)
     const newUser = await db.user.create({
-        data
+        data: {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            password: hashedPassword
+        }
     })
-    
+
+    const {password: _, ...user} = newUser
+
     return NextResponse.json(newUser)
+
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error.message
+        },
+        {
+            status: 500
+        })
+    }
 }
