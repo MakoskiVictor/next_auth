@@ -52,7 +52,10 @@ export default function RegisterPage () {
                     { ...register("firstname", {required: {
                         value: true,
                         message: "Firstname is required"
-                    }, minLength: 2} ) }
+                    }, minLength: 2, pattern: {
+                        value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/,
+                        message: "Please, don't use numbers or special characters"
+                    }} ) }
                 />
 
                 { errors.firstname && (
@@ -68,7 +71,10 @@ export default function RegisterPage () {
                     { ...register("lastname", {required: {
                         value: true,
                         message: "Lastname is required"
-                    }, minLength: 2} ) }
+                    }, minLength: 2, pattern: {
+                        value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/,
+                        message: "Please, don't use numbers or special characters"
+                    }} ) }
                 />
 
                 { errors.lastname && (
