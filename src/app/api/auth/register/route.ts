@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import db from "@/app/libs/db"
+import db from "@/libs/db"
 import bcrypt from "bcrypt"
 
 

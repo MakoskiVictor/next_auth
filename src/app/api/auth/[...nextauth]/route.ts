@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import db from "@/app/libs/db"
+import db from "@/libs/db"
 import bcrypt from "bcrypt"
 
 
@@ -35,7 +35,10 @@ const authOptions = {
                 }
             }
         })
-    ]
+    ],
+    pages: {
+        signIn: "/auth/login"
+    }
 }
 
 const handler = NextAuth(authOptions)
