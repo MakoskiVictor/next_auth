@@ -23,7 +23,7 @@ export async function POST (request : RegisterDataJson) {
             email: data.email
         }
     })
-
+    //Verifico si e luser existe
     if(userFound) {
         return NextResponse.json({
             message: "Email alredy exist"
@@ -32,6 +32,7 @@ export async function POST (request : RegisterDataJson) {
         })
     }
 
+    // Si no existe, creo el usuario con contraseña hasheada
     const hashedPassword = await bcrypt.hash(data.password, 10)
     const newUser = await db.user.create({
         data: {
@@ -42,8 +43,10 @@ export async function POST (request : RegisterDataJson) {
         }
     })
 
+    // No devuelvo el password
     const {password: _, ...user} = newUser
 
+    // Devuelvo el ok
     return NextResponse.json(newUser)
 
     } catch (error: any) {
