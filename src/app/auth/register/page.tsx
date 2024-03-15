@@ -1,6 +1,8 @@
 "use client"
 import { useForm } from 'react-hook-form'
 import { useRouter } from "next/navigation"
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 type FormValues = {
     firstname: string
@@ -12,12 +14,15 @@ type FormValues = {
 
 export default function RegisterPage () {
 
+    // Avisos
+    const notify = () => toast("Email already exist!");
+
     const router = useRouter()
 
     const { register, handleSubmit, formState: { errors}, watch } = useForm<FormValues>()
 
     const onSubmit = handleSubmit(async (data) => {
-  
+
         const formData = {
             firstname: data.firstname,
             lastname: data.lastname,
@@ -32,18 +37,19 @@ export default function RegisterPage () {
             },
             body: JSON.stringify(formData)
         })
-        
+
         if(res.ok) {
             router.push("/auth/login")
+        } else {
+            notify()
         }
     })
-
-    console.log(errors)
 
     return(
         <section className=' h-[calc(100vh-7rem)] flex justify-center items-center ' >
             <form onSubmit={onSubmit} className='w-full sm:w-1/4 p-7 ' noValidate >
                 <h1 className=' text-slate-200 font-bold text-4xl mb-4 ' >Register</h1>
+                <ToastContainer theme='dark' />
 
                 <label htmlFor="firstname" className=' text-slate-500 mb-2 block text-sm ' > Firstname </label>
                 <input type="text" 
