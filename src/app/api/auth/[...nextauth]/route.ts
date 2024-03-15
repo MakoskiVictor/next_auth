@@ -10,7 +10,7 @@ const authOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                email: { label: "email", type: "text", placeholder: "jsmith" },
+                email: { label: "email", type: "text" },
                 password: { label: "password", type: "password" }
             },
             async authorize(credentials, req): Promise<any> {
@@ -22,11 +22,11 @@ const authOptions = {
                     }
                 })
 
-                if(!userFound) return null
+                if(!userFound) throw new Error("User not found")
 
                 const matchPassword = credentials?.password ? await bcrypt.compare(credentials?.password, userFound.password) : false
 
-                if(!matchPassword) return null
+                if(!matchPassword) throw new Error("User not found")
 
                 return {
                     id: userFound.id,
