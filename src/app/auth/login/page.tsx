@@ -76,7 +76,7 @@ export default function LoginPage () {
                 ) }
 
             <button className=' w-full bg-blue-500 text-white p-3 rounded-lg mt-2 ' >
-                    Register
+                    LogIn
                 </button>
             </form>
         </section>
