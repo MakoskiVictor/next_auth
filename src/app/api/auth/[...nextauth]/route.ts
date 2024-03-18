@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 
 
-const authOptions = {
+export const authOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -37,8 +37,7 @@ const authOptions = {
         })
     ],
     pages: {
-        signIn: "/auth/login",
-        //error: "/auth/login"
+        signIn: "/auth/login"
     }
 }
 
